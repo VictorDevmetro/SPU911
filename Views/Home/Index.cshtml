@@ -1,8 +1,71 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var name = "Viqqctor";
+    var position = "";
+
+    var personType = 22;
+
+    var list = new string[] { "first", "second", "third" };
+    var list1 = new List<string> { "first", "second", "third" };
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+@*<div>
+    <h3>@("Mr. " + name)  <a href="mailto:victor@gmail.com">here</a></h3>
+
+    @if (name == "Victor")
+    {
+        position = "teacher";
+    }
+    else
+    {
+        position = "student";
+    }
+
+    <p>@position</p>
+
+    @switch (personType)
+    {
+        case 1:
+            <strong> teacher</strong>
+            break;
+        case 2:
+            <i> student</i>
+            break;
+        default:
+            <span style="color: red">
+                other
+            </span>
+            break;
+    }
+
+    <ul>
+        @for (var i = 1; i <= 10; i++)
+        {
+            <li>
+                item @i
+            </li>
+        }
+    </ul>
+
+    <ol>
+        @foreach (var item in list)
+        {
+            <li>item</li>
+        }
+    </ol>
+
+    <ol>
+        @foreach (var item in list1)
+        {
+            <li>
+                item
+                </li>
+        }
+    </ol>
+</div>
+*@
