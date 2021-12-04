@@ -1,17 +1,54 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-    var name = "Viqqctor";
-    var position = "";
+﻿@model HomeIndexImageModel;
+@{
+    //    ViewData["Title"] = "Home Page";
 
-    var personType = 22;
 
-    var list = new string[] { "first", "second", "third" };
-    var list1 = new List<string> { "first", "second", "third" };
+    //var name = "Viqqctor";
+    //var position = "";
+
+    //var personType = 22;
+
+    //var list = new string[] { "first", "second", "third" };
+    //var list1 = new List<string> { "first", "second", "third" };
+
+    var list = ViewData["List"] as IList<string>;
 }
+
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div>
+    <p>
+        title: @ViewData["Title"]
+    </p>
+    <p>
+        bag title: @ViewBag.BagTitle
+        @{
+            ViewBag.BagTitle = "for layout";
+        }
+    </p>
+    <p>
+        number: @ViewData["Number"]
+    </p>
+
+    <p>
+        list: @(ViewData["List"])
+    </p>
+
+    <ol>
+        @foreach (var item in list)
+        {
+            <li>
+                @item
+            </li>
+        }
+    </ol>
+
+    <img src="@Model.ImageUrl" alt="@Model.ImageAltText"/>
+    alt text: @Model.ToString()
 </div>
 
 @*<div>
@@ -19,53 +56,53 @@
 
     @if (name == "Victor")
     {
-        position = "teacher";
+    position = "teacher";
     }
     else
     {
-        position = "student";
+    position = "student";
     }
 
     <p>@position</p>
 
     @switch (personType)
     {
-        case 1:
-            <strong> teacher</strong>
-            break;
-        case 2:
-            <i> student</i>
-            break;
-        default:
-            <span style="color: red">
-                other
-            </span>
-            break;
+    case 1:
+    <strong> teacher</strong>
+    break;
+    case 2:
+    <i> student</i>
+    break;
+    default:
+    <span style="color: red">
+    other
+    </span>
+    break;
     }
 
     <ul>
-        @for (var i = 1; i <= 10; i++)
-        {
-            <li>
-                item @i
-            </li>
-        }
+    @for (var i = 1; i <= 10; i++)
+    {
+    <li>
+    item @i
+    </li>
+    }
     </ul>
 
     <ol>
-        @foreach (var item in list)
-        {
-            <li>item</li>
-        }
+    @foreach (var item in list)
+    {
+    <li>item</li>
+    }
     </ol>
 
     <ol>
-        @foreach (var item in list1)
-        {
-            <li>
-                item
-                </li>
-        }
+    @foreach (var item in list1)
+    {
+    <li>
+    item
+    </li>
+    }
     </ol>
-</div>
+    </div>
 *@
