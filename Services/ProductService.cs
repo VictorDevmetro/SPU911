@@ -5,7 +5,11 @@ using System.Linq;
 
 namespace SPU911.Services
 {
-    public class ProductService
+    public class ProductService: 
+        IProductCommonService, 
+        IProducControllerService, 
+        IHomeControllerProductService, 
+        ICRUDService<ProductModel>
     {
         private IList<ProductModel> _products;
 
@@ -94,6 +98,59 @@ namespace SPU911.Services
         {
             return _products.Where(x => x.ProductType == type && x.IsNew).ToList();
         }
+
+        public ProductModel Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<ProductModel> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ProductModel CreateOrUpdate(ProductModel item)
+        {
+            if (item.Id == default)
+            {
+                item.Id = _products.Count;
+                _products.Add(item);
+                return item;
+            }
+
+            try
+            {
+                _products[item.Id] = item;
+
+            }
+            catch (Exception)
+            {
+
+                throw new Exception("Not found");
+            }
+            return item;
+        }
+
+        public bool Delete(ProductModel item)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public interface IProductCommonService
+    {
+        IList<ProductModel> GetAllProducts();
+        ProductModel GetProduct(int id);
+        IList<ProductModel> GetProductsByType(ProductTypes type = ProductTypes.Laptops);
+        ProductModel CreateOrUpdate(ProductModel item);
+    }
+
+    public interface ICRUDService<T>
+    {
+        T Get(int id);
+        IList<T> GetAll();
+        T CreateOrUpdate (T item);
+        bool Delete(T item);
 
     }
 }

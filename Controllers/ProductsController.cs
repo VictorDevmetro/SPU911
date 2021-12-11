@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SPU911.Services;
 using SPU911.ViewModel;
+using System.Linq;
 
 namespace SPU911.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly ProductService _service;
+        private readonly IProducControllerService _service;
 
-        public ProductsController()
+        public ProductsController(IProducControllerService service)
         {
-            _service = new ProductService();
+            _service = service; // new ProductService()
         }
 
         public IActionResult Index(int id)

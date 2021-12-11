@@ -14,7 +14,7 @@ namespace SPU911.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ProductService _service;
+        private readonly IHomeControllerProductService _service;
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -22,10 +22,22 @@ namespace SPU911.Controllers
             base.OnActionExecuting(context);
         }
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IHomeControllerProductService service)
         {
             _logger = logger;
-            _service = new ProductService();
+            _service = service; // new ProductService()
+
+            //_service.CreateOrUpdate(new ProductModel
+            //{
+            //    SalePercent = 99,
+            //    IsNew = true,
+            //    CategoryName = "!!!!Headphones",
+            //    ProductName = "!!!IPods",
+            //    Price = 5000,
+            //    PriceOld = 6250,
+            //    Rate = 4,
+            //    ProductType = ProductTypes.Accesories
+            //});
         }
 
         public IActionResult Index()

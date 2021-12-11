@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SPU911.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,14 @@ namespace SPU911
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            //_ = services.AddScoped<IProducControllerService, ProductService>();
+            //_ = services.AddScoped<IHomeControllerProductService, ProductService>();
+
+//            services.AddSingleton<IProductCommonService, ProductService>();
+
+            var service = new ProductService();
+            services.AddSingleton<IProducControllerService>(service);
+            services.AddSingleton<IHomeControllerProductService>(service);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
