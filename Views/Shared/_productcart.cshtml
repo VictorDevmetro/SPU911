@@ -1,0 +1,32 @@
+﻿@model ProductModel;
+
+<div class="product">
+    <div class="product-img">
+        <img src="~/img/@Model.ImageName" alt="">
+        <div class="product-label">
+            @if (Model.SalePercent > 0)
+            {
+                <span class="sale">-@(Model.SalePercent)%</span>
+            }
+
+            @if (Model.IsNew)
+            {
+                <span class="new">New</span>
+            }
+        </div>
+    </div>
+    <div class="product-body">
+        <p class="product-category">@Model.CategoryName</p>
+        <h3 class="product-name"><a href="/products/index/@Model.Id">@Model.ToString()</a></h3>
+        <h4 class="product-price">$ @(Model.Price) <del class="product-old-price">@(Model.PriceOld)</del></h4>
+        @Html.Partial("_showrating", Model.Rate)
+        <div class="product-btns">
+            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+            <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+            <a class="quick-view" asp-controller="Products" asp-action="Index" asp-route-id="@Model.Id"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a>
+        </div>
+    </div>
+    <div class="add-to-cart">
+        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+    </div>
+</div>

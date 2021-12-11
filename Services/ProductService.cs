@@ -1,4 +1,5 @@
 ﻿using SPU911.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,9 +15,8 @@ namespace SPU911.Services
         {
             _products = new List<ProductModel> {
                 new ProductModel{
-                    ImageName ="product01.png",
                     SalePercent =15,
-                    IsNew = true,
+                    IsNew = false,
                     CategoryName = "Headphones",
                     ProductName = "IPods",
                     Price = 500,
@@ -26,8 +26,7 @@ namespace SPU911.Services
                 },
 
                 new ProductModel{
-                    ImageName ="product02.png",
-                    SalePercent = 10,
+                    SalePercent = 0,
                     IsNew = true,
                     CategoryName = "Laptops",
                     ProductName = "MacBook Air",
@@ -38,7 +37,6 @@ namespace SPU911.Services
                 },
 
                 new ProductModel{
-                    ImageName ="product03.png",
                     SalePercent = 5,
                     IsNew = true,
                     CategoryName = "Desktop",
@@ -49,7 +47,6 @@ namespace SPU911.Services
                     ProductType = ProductTypes.Laptops
                 },
                 new ProductModel{
-                    ImageName ="product04.png",
                     SalePercent = 0,
                     IsNew = true,
                     CategoryName = "Cameras",
@@ -61,7 +58,6 @@ namespace SPU911.Services
                 },
 
                 new ProductModel{
-                    ImageName ="product05.png",
                     SalePercent = 25,
                     IsNew = true,
                     CategoryName = "Calls",
@@ -72,7 +68,6 @@ namespace SPU911.Services
                     ProductType = ProductTypes.SmartPhones
                 },
                 new ProductModel{
-                    ImageName ="product06.png",
                     SalePercent = 5,
                     IsNew = true,
                     CategoryName = "Printer",
@@ -83,13 +78,22 @@ namespace SPU911.Services
                     ProductType = ProductTypes.Accesories
                 },
             };
-    }
 
-    public IList<ProductModel> GetAllProducts() => _products;
-    public IList<ProductModel> GetNewProducts(ProductTypes type = ProductTypes.Laptops)
-    {
-        return _products.Where(x => x.ProductType == type && x.IsNew).ToList();
-    }
+            for (int i = 1; i <= _products.Count; i++)
+            {
+                _products[i-1].Id = i;
+            }
+        }
 
-}
+        public IList<ProductModel> GetAllProducts() => _products;
+        public ProductModel GetProduct(int id)
+        {
+            return _products.FirstOrDefault(x => x.Id == id);
+        }
+        public IList<ProductModel> GetProductsByType(ProductTypes type = ProductTypes.Laptops)
+        {
+            return _products.Where(x => x.ProductType == type && x.IsNew).ToList();
+        }
+
+    }
 }

@@ -1,0 +1,27 @@
+﻿@model IList<ProductModel>
+
+<!-- Section -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="section-title text-center">
+                    <h3 class="title">Related Products</h3>
+                </div>
+            </div>
+
+            @foreach (var product in Model)
+            {
+                <div class="col-md-3 col-xs-6">
+                    @Html.Partial("_productcart", product)
+                </div>
+            }
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /Section -->
