@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using SPU911.Models;
+using SPU911.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,6 +14,7 @@ namespace SPU911.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ProductService _service;
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -23,6 +25,7 @@ namespace SPU911.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            _service = new ProductService();
         }
 
         public IActionResult Index()
@@ -32,14 +35,8 @@ namespace SPU911.Controllers
 
             ViewBag.BagTitle = "Bag title";
 
-            var model = new HomeIndexImageModel
-            {
-                ImageUrl = "https://simple-fauna.ru/wp-content/uploads/2016/11/tukan-ptica_5.jpg",
-                ImageAltText = "Alternative text",
-                H = 150,
-                W = 240,
-                KByte = 12.5M
-            };
+            var model = _service.GetAllProducts();
+
             return View(model); 
         }
 
