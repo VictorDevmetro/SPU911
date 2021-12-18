@@ -5,7 +5,7 @@ namespace SPU911.Services
 {
     public interface IHomeControllerProductService
     {
-        IList<ProductModel> GetAllProducts();
+        IList<ProductModel> GetAllProducts(string searchQuery = null, ProductTypes? product_type = null);
 
     }
 }

@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace SPU911.Services
 {
-    public class ProductService: 
-        IProductCommonService, 
-        IProducControllerService, 
-        IHomeControllerProductService, 
+    public class ProductService :
+        IProductCommonService,
+        IProducControllerService,
+        IHomeControllerProductService,
         ICRUDService<ProductModel>
     {
         private IList<ProductModel> _products;
@@ -39,7 +39,6 @@ namespace SPU911.Services
                     Rate = 5,
                     ProductType = ProductTypes.Laptops
                 },
-
                 new ProductModel{
                     SalePercent = 5,
                     IsNew = true,
@@ -60,7 +59,6 @@ namespace SPU911.Services
                     Rate = 3,
                     ProductType = ProductTypes.Cameras
                 },
-
                 new ProductModel{
                     SalePercent = 25,
                     IsNew = true,
@@ -85,11 +83,26 @@ namespace SPU911.Services
 
             for (int i = 1; i <= _products.Count; i++)
             {
-                _products[i-1].Id = i;
+                _products[i - 1].Id = i;
             }
         }
 
-        public IList<ProductModel> GetAllProducts() => _products;
+        public IList<ProductModel> GetAllProducts(string searchQuery = null, ProductTypes? productType = null)
+        {
+            var list = _products;
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                list = list.Where(x => x.ProductName.Contains(searchQuery, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            }
+
+            if (list.Count > 0 && productType.HasValue)
+            {
+                list = list.Where(x => x.ProductType == productType.Value).ToList();
+            }
+
+            return list;
+        }
         public ProductModel GetProduct(int id)
         {
             return _products.FirstOrDefault(x => x.Id == id);
@@ -109,26 +122,26 @@ namespace SPU911.Services
             throw new NotImplementedException();
         }
 
-        public ProductModel CreateOrUpdate(ProductModel item)
+        public ProductModel CreateOrUpdate(ProductModel model)
         {
-            if (item.Id == default)
+            if (model.Id == default)
             {
-                item.Id = _products.Count;
-                _products.Add(item);
-                return item;
+                model.Id = _products.Count + 1;
+                _products.Add(model);
+                return model;
             }
 
             try
             {
-                _products[item.Id] = item;
+                _products[model.Id-1] = model;
 
             }
             catch (Exception)
             {
-
-                throw new Exception("Not found");
+                return null;
+                //throw new Exception("Not found");
             }
-            return item;
+            return model;
         }
 
         public bool Delete(ProductModel item)
@@ -139,7 +152,7 @@ namespace SPU911.Services
 
     public interface IProductCommonService
     {
-        IList<ProductModel> GetAllProducts();
+        IList<ProductModel> GetAllProducts(string searchQuery = null, ProductTypes? productType = null);
         ProductModel GetProduct(int id);
         IList<ProductModel> GetProductsByType(ProductTypes type = ProductTypes.Laptops);
         ProductModel CreateOrUpdate(ProductModel item);
@@ -149,7 +162,7 @@ namespace SPU911.Services
     {
         T Get(int id);
         IList<T> GetAll();
-        T CreateOrUpdate (T item);
+        T CreateOrUpdate(T item);
         bool Delete(T item);
 
     }

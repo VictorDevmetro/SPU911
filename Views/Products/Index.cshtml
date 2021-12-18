@@ -30,7 +30,11 @@
             <!-- Product details -->
             <div class="col-md-5">
                 <div class="product-details">
-                    <h2 class="product-name">@product.ToString()</h2>
+                    <h2 class="product-name">
+                        @product.ToString()
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@product.Id"> Edit</a>
+                        <a class="btn btn-warning" asp-action="Delete" asp-route-id="@product.Id"> Remove</a>
+                    </h2>
                     <div>
                         @Html.Partial("_showrating", product.Rate)
                         <a class="review-link" href="#">10 Review(s) | Add your review</a>

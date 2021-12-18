@@ -1,0 +1,29 @@
+﻿@model SPU911.Models.ProductModel
+
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <h4>ProductModel</h4>
+        <hr />
+        <div class="row">
+            <div class=" col-md-push-2 col-md-4">
+                <form asp-action="Edit" asp-route-id="@Model.Id">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Id" hidden />
+
+                    @Html.Partial("_create_or_update", Model)
+
+                    <div class="form-group">
+                        <input type="submit" value="Update" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <a asp-controller="Home" asp-action="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+
+

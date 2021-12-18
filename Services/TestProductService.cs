@@ -5,6 +5,11 @@ namespace SPU911.Services
 {
     public class TestProductService : IProducControllerService
     {
+        public ProductModel CreateOrUpdate(ProductModel model)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public ProductModel GetProduct(int id)
         {
             return new ProductModel

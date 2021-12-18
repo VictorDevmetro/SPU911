@@ -8,6 +8,6 @@ namespace SPU911.Services
         ProductModel GetProduct(int id);
 
         IList<ProductModel> GetProductsByType(ProductTypes type = ProductTypes.Laptops);
-
+        ProductModel CreateOrUpdate(ProductModel model);
     }
 }

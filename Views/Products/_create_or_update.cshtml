@@ -1,0 +1,49 @@
+﻿@model SPU911.Models.ProductModel
+
+<div class="form-group">
+    <label asp-for="SalePercent" class="control-label"></label>
+    <input asp-for="SalePercent" class="form-control" />
+    <span asp-validation-for="SalePercent" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <div class="checkbox">
+        <label>
+            <input asp-for="IsNew" /> @Html.DisplayNameFor(model => model.IsNew)
+        </label>
+    </div>
+</div>
+<div class="form-group">
+    <label asp-for="CategoryName" class="control-label"></label>
+    <input asp-for="CategoryName" class="form-control" />
+    <span asp-validation-for="CategoryName" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="ProductName" class="control-label"></label>
+    <input asp-for="ProductName" class="form-control" />
+    <span asp-validation-for="ProductName" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Price" class="control-label"></label>
+    <input asp-for="Price" class="form-control" />
+    <span asp-validation-for="Price" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="PriceOld" class="control-label"></label>
+    <input asp-for="PriceOld" class="form-control" />
+    <span asp-validation-for="PriceOld" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Rate" class="control-label"></label>
+    <input asp-for="Rate" class="form-control" />
+    <span asp-validation-for="Rate" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="ProductType" class="control-label"></label>
+    <select asp-for="ProductType" class="form-control" asp-items="Html.GetEnumSelectList<ProductTypes>()"></select>
+    <span asp-validation-for="ProductType" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Details" class="control-label"></label>
+    <textarea asp-for="Details" class="form-control"></textarea>
+    <span asp-validation-for="Details" class="text-danger"></span>
+</div>

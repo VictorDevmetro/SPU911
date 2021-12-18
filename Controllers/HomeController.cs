@@ -40,14 +40,18 @@ namespace SPU911.Controllers
             //});
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromQuery] string q, ProductTypes? product_type = null)
         {
             ViewData["Title"] = "Custom title";
             ViewData["Number"] = 1;
 
+            ViewData["SearchQuery"] = q;
+            ViewData["ProductType"] = product_type;
+
+
             ViewBag.BagTitle = "Bag title";
 
-            var model = _service.GetAllProducts();
+            var model = _service.GetAllProducts(q, product_type);
 
             return View(model); 
         }
