@@ -8,7 +8,6 @@
         <div class="row">
             <div class=" col-md-push-2 col-md-4">
                 <form asp-action="Edit" asp-route-id="@Model.Id">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input asp-for="Id" hidden />
 
                     @Html.Partial("_create_or_update", Model)
@@ -16,6 +15,7 @@
                     <div class="form-group">
                         <input type="submit" value="Update" class="btn btn-primary" />
                     </div>
+                    <div asp-validation-summary="All" class="text-danger"></div>
                 </form>
             </div>
         </div>

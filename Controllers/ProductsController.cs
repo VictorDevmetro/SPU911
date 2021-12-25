@@ -60,6 +60,32 @@ namespace SPU911.Controllers
         [HttpPost]
         public IActionResult Edit(int id, [FromForm] ProductModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.ProductName.Length > 15)
+            {
+                ModelState.AddModelError(nameof(model.ProductName), "Занадто довга назва продукту");
+            }
+
+            if (model.Price < 0)
+            {
+                ModelState.AddModelError(nameof(model.Price), "Ціна повинна бути більша 0");
+            }
+
+            //ModelState.AddModelError(nameof(model.ProductName), "Занадто довга назва продукту #2");
+            //ModelState.AddModelError(nameof(model.Price), "Ціна повинна бути більша 0");
+            //ModelState.AddModelError("Price111", "Price111 - Ціна повинна бути більша 0");
+
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Перевірте правильність внесених даних");
+
+                return View(model);
+            }
+
             var newProduct = _service.CreateOrUpdate(model);
 
             if (newProduct != null)
