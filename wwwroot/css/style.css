@@ -2188,3 +2188,7 @@ textarea.input {
     margin-top: 10px;
   }
 }
+
+.read-heart {
+    color: red !important;
+}

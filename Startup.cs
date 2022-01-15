@@ -28,11 +28,13 @@ namespace SPU911
             //_ = services.AddScoped<IProducControllerService, ProductService>();
             //_ = services.AddScoped<IHomeControllerProductService, ProductService>();
 
-//            services.AddSingleton<IProductCommonService, ProductService>();
-
-            var service = new ProductService();
+            //            services.AddSingleton<IProductCommonService, ProductService>();
+            var wishList = new WishListService();
+            var service = new ProductService(wishList);
+            services.AddSingleton<IWishListService>(wishList);
             services.AddSingleton<IProducControllerService>(service);
             services.AddSingleton<IHomeControllerProductService>(service);
+            services.AddSingleton<IWishListProducts>(service);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

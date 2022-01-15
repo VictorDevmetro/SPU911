@@ -118,5 +118,15 @@ namespace SPU911.Controllers
                 return View();
             }
         }
+
+        public ActionResult DeleteAjax(int id)
+        {
+            var product = _service.GetProduct(id);
+
+            if (product == null) return NotFound();
+
+            return PartialView(product);
+        }
+
     }
 }

@@ -1,5 +1,7 @@
 ﻿@model ProductModel;
-
+@{
+    var redHeartClass = Model.InWishList ? "read-heart" : "";
+}
 <div class="product">
     <div class="product-img">
         <img src="~/img/@Model.ImageName" alt="">
@@ -21,7 +23,7 @@
         <h4 class="product-price">$ @(Model.Price) <del class="product-old-price">@(Model.PriceOld)</del></h4>
         @Html.Partial("_showrating", Model.Rate)
         <div class="product-btns">
-            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+            <button class="add-to-wishlist" onclick="toggleWhisList(@Model.Id); toggleRedHeartClass(@Model.Id)"><i id="heart-@Model.Id" class="fa fa-heart-o @redHeartClass"></i><span class="tooltipp">add to wishlist</span></button>
             <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
             <a class="quick-view" asp-controller="Products" asp-action="Index" asp-route-id="@Model.Id"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a>
         </div>

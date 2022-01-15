@@ -9,13 +9,16 @@ namespace SPU911.Services
         IProductCommonService,
         IProducControllerService,
         IHomeControllerProductService,
-        ICRUDService<ProductModel>
+        ICRUDService<ProductModel>,
+        IWishListProducts
     {
         private IList<ProductModel> _products;
 
+        private readonly IWishListService _wishListService;
+
         public IList<ProductModel> Products { get { return _products; } }
 
-        public ProductService()
+        public ProductService(IWishListService service)
         {
             _products = new List<ProductModel> {
                 new ProductModel{
@@ -85,6 +88,9 @@ namespace SPU911.Services
             {
                 _products[i - 1].Id = i;
             }
+
+            _wishListService = service;
+
         }
 
         public IList<ProductModel> GetAllProducts(string searchQuery = null, ProductTypes? productType = null)
@@ -101,6 +107,12 @@ namespace SPU911.Services
                 list = list.Where(x => x.ProductType == productType.Value).ToList();
             }
 
+            var wishList = _wishListService.GetWishList();
+            foreach (var item in list)
+            {
+                item.InWishList = wishList.Contains(item.Id);
+            }
+
             return list;
         }
         public ProductModel GetProduct(int id)
@@ -110,6 +122,20 @@ namespace SPU911.Services
         public IList<ProductModel> GetProductsByType(ProductTypes type = ProductTypes.Laptops)
         {
             return _products.Where(x => x.ProductType == type && x.IsNew).ToList();
+        }
+
+        public IList<AjaxProductModel> GetWishList()
+        {
+            var wishList = _wishListService.GetWishList();
+            var list = _products.Where(x => wishList.Contains(x.Id))
+                .Select(x => new AjaxProductModel
+                {
+                    Id = x.Id,
+                    Price = x.Price,
+                    ProductName = x.ProductName
+                }).ToList();
+
+            return list;
         }
 
         public ProductModel Get(int id)
@@ -166,4 +192,5 @@ namespace SPU911.Services
         bool Delete(T item);
 
     }
+
 }

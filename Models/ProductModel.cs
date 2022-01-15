@@ -61,6 +61,18 @@ namespace SPU911.Models
         {
             return ProductName;
         }
+
+        public bool InWishList { get; set; }
+    }
+
+
+    public class AjaxProductModel
+    {
+        public int Id { get; set; }
+        public string ImageName { get { return $"product0{Id % 9 + 1}.png"; } }
+        public string ProductName { get; set; }
+        public decimal Price { get; set; }
+
     }
 
 }

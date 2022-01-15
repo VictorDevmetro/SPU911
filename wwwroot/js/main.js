@@ -166,3 +166,65 @@
 	}
 
 })(jQuery);
+
+function updateWishListQty(qty) {
+	$('#wishListQty').html(qty);
+}
+
+function toggleWhisList(id) {
+	$.ajax({
+		type: 'POST',
+		url: '/api/wishlist/toggle/' + id,
+		contentType: "application/json; charset=utf-8",
+	}).done(function (response) {
+		console.log(response);
+		updateWishListQty(response);
+	});
+}
+
+function getWishListCount() {
+	$.ajax({
+		type: 'POST',
+		url: '/api/wishlist/count',
+		contentType: "application/json; charset=utf-8",
+	}).done(function (response) {
+		console.log(response);
+		updateWishListQty(response);
+	});
+}
+
+function toggleRedHeartClass(id) {
+	var el = $('#heart-' + id);
+	if (el.hasClass('read-heart')) {
+		el.removeClass('read-heart');
+	}
+	else {
+		el.addClass('read-heart');
+	}
+}
+
+function getWishList() {
+	$.ajax({
+		type: 'GET',
+		url: '/api/wishlist',
+		contentType: "application/json; charset=utf-8",
+	}).done(function (response) {
+		console.log(response);
+		let element = ``;
+		$.each(response, function (index, product) {
+			element += `<div class="product-widget">
+							<div class="product-img">
+								<img src="./img/`+ product.imageName + `" alt="">
+							</div>
+                            <div class="product-body">
+								<h3 class="product-name"><a href="#">`+ product.productName + `</a></h3>
+                                <h4 class="product-price"><span class="qty">1x</span>$` + product.price + `</h4>
+                            </div>
+                            <button class="delete"><i class="fa fa-close"></i></button>
+                           </div>`;
+		});
+
+		$('#cart-list').html(element);
+
+	});
+}
