@@ -49,7 +49,7 @@ namespace SPU911.Controllers
             ViewData["ProductType"] = product_type;
 
 
-            ViewBag.BagTitle = "Bag title";
+//            ViewBag.BagTitle = "Bag title";
 
             var model = _service.GetAllProducts(q, product_type);
 

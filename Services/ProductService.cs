@@ -1,4 +1,8 @@
-﻿using SPU911.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SPU911.DAL;
+using SPU911.DAL.Entities;
+using SPU911.Models;
+using SPU911.Services.Mapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,90 +16,32 @@ namespace SPU911.Services
         ICRUDService<ProductModel>,
         IWishListProducts
     {
-        private IList<ProductModel> _products;
+        //private IList<ProductModel> _products;
 
+        private readonly ApplicationDBContext _dbContext;
         private readonly IWishListService _wishListService;
 
-        public IList<ProductModel> Products { get { return _products; } }
-
-        public ProductService(IWishListService service)
+        public IList<ProductModel> Products
         {
-            _products = new List<ProductModel> {
-                new ProductModel{
-                    SalePercent =15,
-                    IsNew = false,
-                    CategoryName = "Headphones",
-                    ProductName = "IPods",
-                    Price = 500,
-                    PriceOld = 625,
-                    Rate = 4,
-                    ProductType = ProductTypes.Accesories
-                },
-
-                new ProductModel{
-                    SalePercent = 0,
-                    IsNew = true,
-                    CategoryName = "Laptops",
-                    ProductName = "MacBook Air",
-                    Price = 2000,
-                    PriceOld = 2599,
-                    Rate = 5,
-                    ProductType = ProductTypes.Laptops
-                },
-                new ProductModel{
-                    SalePercent = 5,
-                    IsNew = true,
-                    CategoryName = "Desktop",
-                    ProductName = "ProBook",
-                    Price = 5000,
-                    PriceOld = 6599,
-                    Rate = 5,
-                    ProductType = ProductTypes.Laptops
-                },
-                new ProductModel{
-                    SalePercent = 0,
-                    IsNew = true,
-                    CategoryName = "Cameras",
-                    ProductName = "Sony",
-                    Price = 5000,
-                    PriceOld = 6599,
-                    Rate = 3,
-                    ProductType = ProductTypes.Cameras
-                },
-                new ProductModel{
-                    SalePercent = 25,
-                    IsNew = true,
-                    CategoryName = "Calls",
-                    ProductName = "MI Pro 10",
-                    Price = 2300,
-                    PriceOld = 2599,
-                    Rate = 2,
-                    ProductType = ProductTypes.SmartPhones
-                },
-                new ProductModel{
-                    SalePercent = 5,
-                    IsNew = true,
-                    CategoryName = "Printer",
-                    ProductName = "Epson L5136",
-                    Price = 350,
-                    PriceOld = 599,
-                    Rate = 5,
-                    ProductType = ProductTypes.Accesories
-                },
-            };
-
-            for (int i = 1; i <= _products.Count; i++)
+            get
             {
-                _products[i - 1].Id = i;
+                return _dbContext.Products
+                    .Include(x => x.ImageItem)
+                    .Select(ProductMapper.Create).ToList();
             }
+        }
+
+        public ProductService(IWishListService service, ApplicationDBContext dbContext)
+        {
+
 
             _wishListService = service;
-
+            _dbContext = dbContext;
         }
 
         public IList<ProductModel> GetAllProducts(string searchQuery = null, ProductTypes? productType = null)
         {
-            var list = _products;
+            var list = Products;
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
@@ -117,17 +63,19 @@ namespace SPU911.Services
         }
         public ProductModel GetProduct(int id)
         {
-            return _products.FirstOrDefault(x => x.Id == id);
+            return ProductMapper.Create(_dbContext.Products.Include(x => x.ImageItem).FirstOrDefault(x => x.Id == id));
         }
         public IList<ProductModel> GetProductsByType(ProductTypes type = ProductTypes.Laptops)
         {
-            return _products.Where(x => x.ProductType == type && x.IsNew).ToList();
+            return _dbContext.Products.Where(x => x.ProductType == type && x.IsNew)
+                .Select(ProductMapper.Create)
+                .ToList();
         }
 
         public IList<AjaxProductModel> GetWishList()
         {
             var wishList = _wishListService.GetWishList();
-            var list = _products.Where(x => wishList.Contains(x.Id))
+            var list = _dbContext.Products.Where(x => wishList.Contains(x.Id))
                 .Select(x => new AjaxProductModel
                 {
                     Id = x.Id,
@@ -150,16 +98,19 @@ namespace SPU911.Services
 
         public ProductModel CreateOrUpdate(ProductModel model)
         {
+            ProductEntity entity = null;
+
             if (model.Id == default)
             {
-                model.Id = _products.Count + 1;
-                _products.Add(model);
+                entity = ProductMapper.Create(model);
+                _dbContext.Products.Add(entity);
                 return model;
             }
 
             try
             {
-                _products[model.Id-1] = model;
+                entity = _dbContext.Products.Include(x => x.ImageItem).FirstOrDefault(x => x.Id == model.Id);
+                entity = ProductMapper.Update(entity, model);
 
             }
             catch (Exception)
@@ -167,7 +118,9 @@ namespace SPU911.Services
                 return null;
                 //throw new Exception("Not found");
             }
-            return model;
+
+            _dbContext.SaveChanges();
+            return ProductMapper.Create(entity);
         }
 
         public bool Delete(ProductModel item)

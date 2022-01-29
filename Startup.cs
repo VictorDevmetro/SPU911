@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SPU911.DAL;
 using SPU911.Services;
 using System;
 using System.Collections.Generic;
@@ -24,32 +26,39 @@ namespace SPU911
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<ApplicationDBContext>(options =>
+                options.UseSqlServer(connectionString)
+            );
+
             services.AddControllersWithViews();
             //_ = services.AddScoped<IProducControllerService, ProductService>();
             //_ = services.AddScoped<IHomeControllerProductService, ProductService>();
 
             //            services.AddSingleton<IProductCommonService, ProductService>();
-            var wishList = new WishListService();
-            var service = new ProductService(wishList);
-            services.AddSingleton<IWishListService>(wishList);
-            services.AddSingleton<IProducControllerService>(service);
-            services.AddSingleton<IHomeControllerProductService>(service);
-            services.AddSingleton<IWishListProducts>(service);
+
+            services.AddScoped<IWishListService, WishListService>();
+            services.AddScoped<IProducControllerService, ProductService>();
+            services.AddScoped<IHomeControllerProductService, ProductService>();
+            services.AddScoped<IWishListProducts, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
+
+            app.UseDeveloperExceptionPage();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

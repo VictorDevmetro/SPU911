@@ -32,7 +32,8 @@ namespace SPU911.Controllers
 
         public IActionResult Create()
         {
-            return View(new ProductModel());
+            throw new System.Exception("Oops!!!");
+//            return View(new ProductModel());
         }
 
         [HttpPost]

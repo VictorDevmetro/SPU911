@@ -7,7 +7,7 @@ namespace SPU911.Models
     public class ProductModel
     {
         public int Id { get; set; }
-        public string ImageName { get { return $"product0{Id % 9 + 1}.png"; } }
+        public string ImageName { get; set; }
 
         [DisplayName("Sale Percent")]
         [Range(0, 100, ErrorMessage = "Значення повинні лежати в межах 0 до 100")]
