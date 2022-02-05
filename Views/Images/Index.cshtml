@@ -1,0 +1,35 @@
+﻿@model IList<ImageModel>
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Index" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <input type="file" name="file" value="" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- container -->
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 col-xs-6">
+                    <div class="">
+                        <div class="shop-img">
+                            <img src="@item.Url" alt="@item.Name">
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>

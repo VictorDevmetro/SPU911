@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,12 +36,17 @@ namespace SPU911
             //_ = services.AddScoped<IProducControllerService, ProductService>();
             //_ = services.AddScoped<IHomeControllerProductService, ProductService>();
 
-            //            services.AddSingleton<IProductCommonService, ProductService>();
+            //services.AddSingleton<IProductCommonService, ProductService>();
 
             services.AddScoped<IWishListService, WishListService>();
             services.AddScoped<IProducControllerService, ProductService>();
             services.AddScoped<IHomeControllerProductService, ProductService>();
             services.AddScoped<IWishListProducts, ProductService>();
+
+            var blobConnectionString = Configuration.GetConnectionString("BlobStorageConnection");
+            services.AddSingleton(x => new BlobServiceClient(blobConnectionString));
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IImageDALService, ImageDALService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

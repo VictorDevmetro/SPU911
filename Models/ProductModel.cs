@@ -8,6 +8,7 @@ namespace SPU911.Models
     {
         public int Id { get; set; }
         public string ImageName { get; set; }
+        public int? ImageId { get; set; }
 
         [DisplayName("Sale Percent")]
         [Range(0, 100, ErrorMessage = "Значення повинні лежати в межах 0 до 100")]
@@ -18,7 +19,7 @@ namespace SPU911.Models
 
         [DisplayName("Category name")]
         //[EmailAddress]
-        [Phone(ErrorMessage = "phone number")]
+        //[Phone(ErrorMessage = "phone number")]
         public string CategoryName { get; set; }
 
         [DisplayName("Product name")]
@@ -31,7 +32,7 @@ namespace SPU911.Models
         public decimal Price { get; set; }
 
         [DisplayName("Old price")]
-        [Compare(nameof(Price), ErrorMessage = "ціни повинні співпадати")]
+        //[Compare(nameof(Price), ErrorMessage = "ціни повинні співпадати")]
         public decimal PriceOld { get; set; }
 
         [Range(0, 6, ErrorMessage = "значення повинно лежати в межах від 0 до 5")]

@@ -1,18 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SPU911.Models;
 using SPU911.Services;
+using SPU911.Services.Mapper;
 using SPU911.ViewModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SPU911.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly IProducControllerService _service;
+        private readonly IImageDALService _imageService;
 
-        public ProductsController(IProducControllerService service)
+        public ProductsController(IProducControllerService service, IImageDALService imageService)
         {
             _service = service; // new ProductService()
+            _imageService = imageService;
         }
 
         public IActionResult Index(int id)
@@ -30,15 +34,25 @@ namespace SPU911.Controllers
             return View(model);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            throw new System.Exception("Oops!!!");
-//            return View(new ProductModel());
+            var imageList = (await _imageService.GetLIst()).Select(ImagesMapper.Create).ToList();
+            ViewData["ImageList"] = imageList;
+
+            return View(new ProductModel());
         }
 
         [HttpPost]
-        public IActionResult Create([FromForm]ProductModel model)
+        public async Task<IActionResult> Create([FromForm]ProductModel model)
         {
+            var imageList = (await _imageService.GetLIst()).Select(ImagesMapper.Create).ToList();
+            ViewData["ImageList"] = imageList;
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var newProduct = _service.CreateOrUpdate(model);
 
             if (newProduct != null)
@@ -49,18 +63,23 @@ namespace SPU911.Controllers
             return View(model);
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var product = _service.GetProduct(id);
-
+            var imageList = (await _imageService.GetLIst()).Select(ImagesMapper.Create).ToList(); 
+            ViewData["ImageList"] = imageList;
             if (product == null) return NotFound();
 
             return View(product);
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, [FromForm] ProductModel model)
+        public async Task<IActionResult> Edit(int id, [FromForm] ProductModel model)
         {
+
+            var imageList = (await _imageService.GetLIst()).Select(ImagesMapper.Create).ToList();
+            ViewData["ImageList"] = imageList;
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -75,10 +94,6 @@ namespace SPU911.Controllers
             {
                 ModelState.AddModelError(nameof(model.Price), "Ціна повинна бути більша 0");
             }
-
-            //ModelState.AddModelError(nameof(model.ProductName), "Занадто довга назва продукту #2");
-            //ModelState.AddModelError(nameof(model.Price), "Ціна повинна бути більша 0");
-            //ModelState.AddModelError("Price111", "Price111 - Ціна повинна бути більша 0");
 
             if (!ModelState.IsValid)
             {

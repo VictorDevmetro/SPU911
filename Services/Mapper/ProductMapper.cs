@@ -24,7 +24,8 @@ namespace SPU911.Services.Mapper
                 PriceOld = entity.PriceOld,
                 Rate = entity.Rate,
                 ProductType = entity.ProductType,
-                CreateDate = entity.CreateDate
+                CreateDate = entity.CreateDate,
+                ImageId = entity.ImageId,
             };
         }
 
@@ -41,7 +42,8 @@ namespace SPU911.Services.Mapper
                 PriceOld = model.PriceOld,
                 Rate = model.Rate,
                 ProductType = model.ProductType,
-                CreateDate = model.CreateDate
+                CreateDate = model.CreateDate,
+                ImageId = model.ImageId,
             };
         }
 
@@ -58,7 +60,7 @@ namespace SPU911.Services.Mapper
             entity.Rate = model.Rate;
             entity.ProductType = model.ProductType;
             entity.CreateDate = model.CreateDate;
-
+            entity.ImageId = model.ImageId;
             return entity;
         }
     }

@@ -67,7 +67,7 @@ namespace SPU911.Services
         }
         public IList<ProductModel> GetProductsByType(ProductTypes type = ProductTypes.Laptops)
         {
-            return _dbContext.Products.Where(x => x.ProductType == type && x.IsNew)
+            return _dbContext.Products.Include(x => x.ImageItem).Where(x => x.ProductType == type && x.IsNew)
                 .Select(ProductMapper.Create)
                 .ToList();
         }
@@ -103,8 +103,9 @@ namespace SPU911.Services
             if (model.Id == default)
             {
                 entity = ProductMapper.Create(model);
-                _dbContext.Products.Add(entity);
-                return model;
+                entity = _dbContext.Products.Add(entity).Entity;
+                _dbContext.SaveChanges();
+                return ProductMapper.Create(entity);
             }
 
             try
